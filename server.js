@@ -33,7 +33,7 @@ app.use(passport.session());
 
 // mongoose.connect("mongodb://localhost:27017/b2umserver").then((c)=> console.log(`Server is connected to DB ${c.connection.host}`));
 mongoose
-  .connect(`${process.env.MONGODB_URL}/b2umserver`)
+  .connect(`${process.env.MONGODB_URL}`)
   .then((c) => console.log(`Server is connected to DB ${c.connection.host}`));
 
   const userSchema = new mongoose.Schema({
