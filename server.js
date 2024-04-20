@@ -6,36 +6,15 @@ import mongoose from "mongoose";
 import session from "express-session";
 import passport from "passport";
 import passportLocalMongoose from "passport-local-mongoose";
-import cors from "cors"
-// const GoogleStrategy = require("passport-google-oauth20").Strategy;
-// const findOrCreate = require("mongoose-findorcreate");
+import cors from "cors";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 app.use(cors());
-// const allowedOrigins = ["http://localhost:5173"];
-// app.use(
-//   cors({
-//     origin: function (origin, callback) {
-//       if (!origin) return callback(null, true);
-//       if (allowedOrigins.indexOf(origin) === -1) {
-//         var err = new Error(
-//           "The CORS policy for this site does not allow access from your origin."
-//         );
-//         return callback(err, false);
-//       }
-//       return callback(null, true);
-//     },
-//   })
-// );
-// app.use(express.static("public"));
-// app.set("view engine", "ejs");
 app.use(express.json());
-// app.use(
-//   bodyParser.urlencoded({
-//     extended: true,
-//   })
-// );
-
+// app.use(bodyParser.urlencoded({ extended: true,}));
 app.use(
   session({
     secret: "Our little secret.",
@@ -52,10 +31,12 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-mongoose.connect("mongodb://localhost:27017/b2umserver").then((c)=> console.log(`Server is connected to DB ${c.connection.host}`));
-// mongoose.set("useCreateIndex", true);
+// mongoose.connect("mongodb://localhost:27017/b2umserver").then((c)=> console.log(`Server is connected to DB ${c.connection.host}`));
+mongoose
+  .connect(`${process.env.MONGODB_URL}/b2umserver`)
+  .then((c) => console.log(`Server is connected to DB ${c.connection.host}`));
 
-const userSchema = new mongoose.Schema({
+  const userSchema = new mongoose.Schema({
    fname: {
     type: String,
     required: [true, "Please enter your name"],
@@ -100,7 +81,6 @@ passport.serializeUser(function (user, done) {
 });
 
 passport.deserializeUser( async function (id, done) {
-    console.log(id);
   const user = await User.findById(id)
    try {
     if (user) {
@@ -109,7 +89,6 @@ passport.deserializeUser( async function (id, done) {
         done(null,false)
     }
    } catch (error) {
-    console.log(error);
     done(error, false);
    }
     // done(err, user);
@@ -126,7 +105,6 @@ app.get("/", function (req, res) {
 
 
 app.get("/user/myinfo", function (req, res) {
-    console.log(req.session);
   if (req.user) {
     // User is authenticated, send their info
     res.status(200).json({
@@ -149,7 +127,6 @@ app.get("/logout", function (req, res,next) {
     if (err) {
       return next(err);
     }
-    console.log(req.user);
     const userName = req.user?.username || "there" ;
     res.status(200).json({
       success: true,
@@ -196,7 +173,6 @@ app.post("/user/login", function (req, res) {
   req.login(user, function (err) {
    
     if (err) {
-      console.log(err);
       // Handle authentication failure (invalid credentials)
       return res.status(401).json({
         success: false,
