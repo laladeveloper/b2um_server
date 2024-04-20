@@ -12,7 +12,24 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
-app.use(cors());
+// app.use(cors());
+const whitelist = ["http://localhost:5173", "https://b2um.vercel.app"];
+
+// Configure CORS options
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Check if the origin is in the whitelist
+    if (whitelist.includes(origin)) {
+      callback(null, true); // Allow the request
+    } else {
+      callback(new Error("Not allowed by CORS")); // Reject the request
+    }
+  },
+};
+
+// Apply CORS middleware with options
+app.use(cors(corsOptions));
+
 app.use(express.json());
 // app.use(bodyParser.urlencoded({ extended: true,}));
 app.use(
