@@ -13,7 +13,11 @@ dotenv.config();
 
 const app = express();
 // app.use(cors());
-const whitelist = ["http://localhost:5173", "https://b2um.vercel.app"];
+const whitelist = [
+  "http://localhost:5173",
+  "https://b2um.vercel.app",
+  "https://b2um-server.vercel.app/",
+];
 
 // Configure CORS options
 const corsOptions = {
