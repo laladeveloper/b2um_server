@@ -14,8 +14,14 @@ export const createUser = async (req, res) => {
 
       const user = new User({ email, username, password: hashedPassword });
       await user.save();
-      sendToken(user, 201, res);
-     
+      const token = await user.getJwtToken();
+
+      res.status(200).json({
+        success: true,
+        message: `Welcome ${user.username} `,
+        user,
+        token,
+      });
     } catch (error) {
       res.status(400).json({
         success: false,
@@ -94,7 +100,7 @@ export const loginUser = async (req, res) => {
         { username },
         { email: username }, // Check if the input matches the 'email' field as well
       ],
-    });
+    }).select("-password");
     // const user = await User.findOne({ username });
     if (!user) {
       return res.status(401).json({
@@ -112,8 +118,14 @@ export const loginUser = async (req, res) => {
         message: `Invalid email or username or password`,
       });
     }
-    sendToken(user, 200, res);
-   
+    const token = await user.getJwtToken();
+
+    res.status(200).json({
+      success: true,
+      message: `Welcome ${user.username} `,
+      user,
+      token,
+    });
   } catch (error) {
     res.status(400).json({
       message: "ther is error",
