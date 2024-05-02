@@ -50,7 +50,8 @@ export const userInfo = async (req, res) => {
 
     // Verify and decode the token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
+    console.log(`jwt secret`);
+    console.log(process.env.JWT_SECRET);
     // Retrieve the user from the database
     const user = await User.findById(decoded.id);
 

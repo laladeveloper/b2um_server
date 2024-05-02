@@ -34,18 +34,9 @@ const userSchema = new mongoose.Schema({
   },
   dob:{
     type:Date
-  }
+  },
+  
 });
-
-
-//  hashing password 
-// userSchema.pre("save", async function (next) {
-//   if (!this.isModified("password")) {
-//     next();
-//   }
-
-//   this.password = await bcrypt.hash(this.password, 15);
-// });
 
 // JWT TOKEN
 userSchema.methods.getJwtToken = function () {
@@ -53,6 +44,7 @@ userSchema.methods.getJwtToken = function () {
     expiresIn: process.env.JWT_EXPIRE * 24 * 60 * 60 * 1000,
   });
 };
-
+console.log(`secret in user model`);
+console.log(process.env.JWT_SECRET);
 const User = mongoose.model("User", userSchema);
 export default User;
