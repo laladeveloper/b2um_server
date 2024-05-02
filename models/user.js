@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
-import  validator from "validator";
-import passportLocalMongoose from "passport-local-mongoose";
+import validator from "validator";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const userSchema = new mongoose.Schema({
   fname: {
     type: String,
-    required: [true, "Please enter your name"],
   },
   lname: {
     type: String,
@@ -32,18 +32,26 @@ const userSchema = new mongoose.Schema({
   gender: {
     type: String,
   },
+  dob:{
+    type:Date
+  }
 });
 
-// // plugin for passport-local-mongoose
-userSchema.plugin(passportLocalMongoose);
-// Plugin for passport-local-mongoose
-// userSchema.plugin(passportLocalMongoose, {
-//   usernameField: "email", // Use email as the username field for authentication
+
+//  hashing password 
+// userSchema.pre("save", async function (next) {
+//   if (!this.isModified("password")) {
+//     next();
+//   }
+
+//   this.password = await bcrypt.hash(this.password, 15);
 // });
 
-// Method to verify password
-userSchema.methods.verifyPassword = function (password) {
-  return this.authenticate(password); // Use passport-local-mongoose's built-in authenticate method
+// JWT TOKEN
+userSchema.methods.getJwtToken = function () {
+  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRE * 24 * 60 * 60 * 1000,
+  });
 };
 
 const User = mongoose.model("User", userSchema);
