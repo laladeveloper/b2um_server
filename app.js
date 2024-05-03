@@ -28,7 +28,7 @@ const corsOptions = {
 };
 
 // app.use(cors(corsOptions));
-app.use(cors()); // Enable CORS for all origins
+app.use(cors({credentials:true})); // Enable CORS for all origins
 
 app.use("/api/user", userRoute);
 app.use("/api/admin", adminRoute);
