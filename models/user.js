@@ -1,7 +1,7 @@
+import { config } from "dotenv";
+import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import validator from "validator";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 
 const userSchema = new mongoose.Schema({
   fname: {
@@ -40,11 +40,11 @@ const userSchema = new mongoose.Schema({
 
 // JWT TOKEN
 userSchema.methods.getJwtToken = function () {
-  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRE * 24 * 60 * 60 * 1000,
+  return jwt.sign({ id: this._id }, "process.env.JWT_SECRET", {
+    expiresIn: process.env.JWT_EXPIRE+ 30 * 24 * 60 * 60 * 1000,
   });
 };
 console.log(`secret in user model`);
-console.log(process.env.JWT_SECRET);
+console.log( + 30 * 24 * 60 * 60 * 1000);
 const User = mongoose.model("User", userSchema);
 export default User;
