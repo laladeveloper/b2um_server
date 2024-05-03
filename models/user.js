@@ -32,19 +32,17 @@ const userSchema = new mongoose.Schema({
   gender: {
     type: String,
   },
-  dob:{
-    type:Date
+  dob: {
+    type: Date,
   },
-  
 });
-
+const secretKey = process.env.JWT_SECRET || "your_secret_key_here";
 // JWT TOKEN
 userSchema.methods.getJwtToken = function () {
-  return jwt.sign({ id: this._id }, "process.env.JWT_SECRET", {
-    expiresIn: process.env.JWT_EXPIRE+ 30 * 24 * 60 * 60 * 1000,
+  return jwt.sign({ id: this._id }, secretKey, {
+    expiresIn: process.env.JWT_EXPIRE + 30 * 24 * 60 * 60 * 1000,
   });
 };
-console.log(`secret in user model`);
-console.log( + 30 * 24 * 60 * 60 * 1000);
+
 const User = mongoose.model("User", userSchema);
 export default User;
