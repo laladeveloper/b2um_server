@@ -14,7 +14,13 @@ connectDB();
 app.use(cookieParser());
 app.use(express.json());
 
-const allowedOrigins = ["http://localhost:5173", "http://localhost:4000"];
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:4000",
+  "https://b2um-rl1tv8zcd-laladevelopers-projects.vercel.app/",
+  "https://b2um.vercel.app/",
+  "https://b2um-server.vercel.app/",
+];
 
 const corsOptions = {
   origin: allowedOrigins,
