@@ -35,6 +35,11 @@ const userSchema = new mongoose.Schema({
   dob: {
     type: Date,
   },
+  product: [],
+  products: {
+    name: String,
+    price: Number,
+  },
 });
 const secretKey = process.env.JWT_SECRET || "your_secret_key_here";
 // JWT TOKEN

@@ -13,22 +13,29 @@ const app = express();
 connectDB();
 app.use(cookieParser());
 app.use(express.json());
-
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:4000",
-  "https://b2um-rl1tv8zcd-laladevelopers-projects.vercel.app/",
-  "https://b2um.vercel.app/",
-  "https://b2um-server.vercel.app/",
+  "https://b2um-rl1tv8zcd-laladevelopers-projects.vercel.app",
+  "https://b2um.vercel.app",
+  "https://b2um-server.vercel.app",
 ];
 
 const corsOptions = {
-  origin: allowedOrigins,
+  origin: function (origin, callback) {
+    // Check if the origin is in the list of allowed origins or if it's undefined (i.e., not set by the browser)
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS understand saqlain"));
+    }
+  },
   credentials: true,
 };
 
-// app.use(cors(corsOptions));
-app.use(cors({credentials:true})); // Enable CORS for all origins
+app.use(cors(corsOptions));
+
+// app.use(cors({credentials:true})); // Enable CORS for all origins
 
 app.use("/api/user", userRoute);
 app.use("/api/admin", adminRoute);
